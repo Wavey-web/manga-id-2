@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Manga Search</title>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('searchButton').addEventListener('click', searchManga);
+});
+
+function searchManga() {
+    var title = document.getElementById('mangaTitle').value;
+    var apiUrl = 'https://api.comick.cc/v1.0/search';
+    var queryString = `?limit=49&sort=uploaded&q=${encodeURIComponent(title)}`;
+
+    fetch(apiUrl + queryString, {
+        method: 'GET',
+        headers: {
+            // If the API requires an API key or token, set it here
+            // 'Authorization': 'Bearer YOUR_API_TOKEN'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        // Assuming the API returns an array of items and we're interested in the first one
+        var comic = data[0];
+        if(comic) {
+            displayResult(`The HID for ${title} is: ${comic.hid}`);
+        } else {
+            displayResult('No results found.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        displayResult('An error occurred.');
+    });
+}
+
+function displayResult(message) {
+    var resultElement = document.getElementById('result');
+    resultElement.textContent = message;
+}
+</script>
+</head>
+<body>
+    <h1>Manga Search</h1>
+    <input type="text" id="mangaTitle" placeholder="Enter Manga Title">
+    <button id="searchButton">Search</button>
+    <div id="result"></div>
+</body>
+</html>
