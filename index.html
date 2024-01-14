@@ -9,9 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function searchManga() {
+    var proxyUrl = 'https://corsproxy.io/?'; // Proxy server URL
+    var apiUrls = 'https://wavey-web.github.io/manga-id-2/'; // Replace with your API URL
+    var encodedUrl = encodeURIComponent(apiUrls);
     var title = document.getElementById('mangaTitle').value;
     var apiUrl = 'https://api.comick.cc/v1.0/search';
     var queryString = `?limit=49&sort=uploaded&q=${encodeURIComponent(title)}`;
+    var modifiedApiUrl = proxyUrl + encodedUrl; // New variable for the modified API URL
 
     fetch(apiUrl + queryString, {
         method: 'GET',
